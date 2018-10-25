@@ -49,7 +49,7 @@ object EmcRegistry {
 
         // If an OreDictionary name is present show it here
         if (name != null)
-            return emcValues["ore:name"]
+            return emcValues["ore:$name"]
         return null
     }
 }

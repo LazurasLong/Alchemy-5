@@ -1,5 +1,6 @@
 package me.elizabethlfransen.alchemy.extensions
 
+import me.elizabethlfransen.alchemy.registry.EmcRegistry
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -8,7 +9,7 @@ import net.minecraftforge.oredict.OreDictionary
  * This is null if the item stack doesn't have an emc value
  */
 val ItemStack.emcValue: Int?
-    get() = 0 // TODO implement this plz
+    get() = EmcRegistry.getItemValue(this)
 
 val ItemStack.sortedOreDicNames: List<String>
     get() = OreDictionary.getOreIDs(this)
