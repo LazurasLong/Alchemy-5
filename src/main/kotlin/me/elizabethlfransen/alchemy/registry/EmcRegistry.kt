@@ -1,8 +1,10 @@
 package me.elizabethlfransen.alchemy.registry
 
+import me.elizabethlfransen.alchemy.extensions.sortedOreDicNamesDescending
 import net.minecraft.item.ItemStack
 
 object EmcRegistry {
+    private val emcValues = HashMap<String, Int>()
     /**
      * Registers an item to the [EmcRegistry]
      * @param selector An item selector using the following syntax
@@ -19,7 +21,7 @@ object EmcRegistry {
      * @param value The Emc Value of the item
      */
     fun register(selector: String, value: Int) {
-        // TODO
+        emcValues[selector] = value
     }
 
     /**
@@ -27,6 +29,27 @@ object EmcRegistry {
      * @return The EMC Value of the itemStack. If there is no EMC value registered, null is returned
      */
     fun getItemValue(itemStack: ItemStack): Int? {
+        val registry = itemStack.item.registryName
+        if (registry != null) {
+            val name = registry.toString()
+            // Full name is the name with metadata
+            val fullName = "$name:${itemStack.metadata}"
+
+            // If full name is present, otherwise check name without meta
+            if (fullName in emcValues)
+                return emcValues[fullName]
+            else if (name in emcValues)
+                return emcValues[fullName]
+        }
+        // could not find with name and meta; check OreDictionary
+        // OreDictionary names are sorted with names with the most capital letters first
+        val name = itemStack.sortedOreDicNamesDescending.firstOrNull {
+            "ore:$it" in emcValues
+        }
+
+        // If an OreDictionary name is present show it here
+        if (name != null)
+            return emcValues["ore:name"]
         return null
     }
 }
